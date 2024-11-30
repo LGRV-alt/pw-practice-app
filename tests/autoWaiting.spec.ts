@@ -40,3 +40,11 @@ test("Alternative Waits", async ({ page }) => {
   const text = await successButton.allTextContents();
   expect(text).toContain("Data loaded with AJAX get request.");
 });
+
+test("timeouts", async ({ page }) => {
+  // This will increase the time of the test by 3
+  test.slow();
+  // By default, this should pass - timeout set to 30sec by default
+  const successButton = page.locator(".bg-success");
+  await successButton.click();
+});
