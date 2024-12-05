@@ -161,3 +161,33 @@ test("dialog box", async ({ page }) => {
     "mdo@gmail.com"
   );
 });
+
+test("web tables", async ({ page }) => {
+  await page.getByText("Tables & Data").click();
+  await page.getByText("Smart Table").click();
+
+  //1. Get the row by any text in this row
+  const targetRow = page.getByRole("row", { name: "twitter@outlook.com" });
+  await targetRow.locator(".nb-edit").click();
+  // New locator as the element has changed from text to an input box
+  await page.locator("input-editor").getByPlaceholder("Age").clear();
+  await page.locator("input-editor").getByPlaceholder("Age").fill("27");
+  await page.locator(".nb-checkmark").click();
+
+  //2. get the row based on the value in the ID field
+  await page.locator(".ng2-smart-pagination-nav").getByText("2").click();
+  const targetRowByID = page
+    .getByRole("row", { name: "11" })
+    .filter({ has: page.locator("td").nth(1).getByText("11") });
+  await targetRowByID.locator(".nb-edit").click();
+  await page.locator("input-editor").getByPlaceholder("E-mail").clear();
+  await page
+    .locator("input-editor")
+    .getByPlaceholder("E-mail")
+    .fill("spencer@mail.com");
+  await page.locator(".nb-checkmark").click();
+
+  await expect(targetRowByID.locator("td").nth(5)).toHaveText(
+    "spencer@mail.com"
+  );
+});
