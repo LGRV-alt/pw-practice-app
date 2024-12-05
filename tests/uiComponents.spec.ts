@@ -122,6 +122,9 @@ test("Lists and dropdowns", async ({ page }) => {
 });
 
 test("tooltips", async ({ page }) => {
+  /* There can be many issues  when trying to test tooltips, you may need to 
+    freeze the page to inspect the DOM with debugging mode to grab the element as it 
+    changes */
   await page.getByText("Modal & Overlays").click();
   await page.getByText("Tooltip").click();
 
@@ -134,4 +137,27 @@ test("tooltips", async ({ page }) => {
 
   const tooltip = await page.locator("nb-tooltip").textContent();
   expect(tooltip).toEqual("This is a tooltip");
+});
+
+test("dialog box", async ({ page }) => {
+  await page.getByText("Tables & Data").click();
+  await page.getByText("Smart Table").click();
+
+  //   This is a listener added to the test, any dialog boxes that have the entered text will be accepeted
+  page.on("dialog", (dialog) => {
+    expect(dialog.message()).toEqual("Are you sure you want to delete?");
+    dialog.accept();
+  });
+
+  //   Grabbing the first row and hitting the delete button
+  await page
+    .getByRole("table")
+    .locator("tr", { hasText: "mdo@gmail.com" })
+    .locator(".nb-trash")
+    .click();
+
+  // Checking the first row has been deleted
+  await expect(page.locator("table tr").first()).not.toHaveText(
+    "mdo@gmail.com"
+  );
 });
