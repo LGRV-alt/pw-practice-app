@@ -271,4 +271,8 @@ test("Sliders", async ({ page }) => {
   const y = box.y + box.height / 2;
   await page.mouse.move(x, y);
   await page.mouse.down();
+  await page.mouse.move(x + 100, y);
+  await page.mouse.move(x + 100, y + 100);
+  await page.mouse.up();
+  await expect(tempBox).toContainText("30");
 });
