@@ -10,9 +10,7 @@ test.describe("Form Layouts page", () => {
     await page.getByText("Form Layouts").click();
   });
   test("input fields", async ({ page }) => {
-    const usingTheGridEmailInput = page
-      .locator("nb-card", { hasText: "Using the grid" })
-      .getByRole("textbox", { name: "email" });
+    const usingTheGridEmailInput = page.locator("nb-card", { hasText: "Using the grid" }).getByRole("textbox", { name: "email" });
     await usingTheGridEmailInput.fill("test@test.com");
     await usingTheGridEmailInput.clear();
     await usingTheGridEmailInput.pressSequentially("test2@test.com", {
@@ -32,37 +30,21 @@ test.describe("Form Layouts page", () => {
     });
 
     // await usingTheGridForm.getByLabel("Option 1").check({ force: true });
-    await usingTheGridForm
-      .getByRole("radio", { name: "Option 1" })
-      .check({ force: true });
+    await usingTheGridForm.getByRole("radio", { name: "Option 1" }).check({ force: true });
 
     //   Making a generic assertion
-    const radioStatus = await usingTheGridForm
-      .getByRole("radio", { name: "Option 1" })
-      .isChecked();
+    const radioStatus = await usingTheGridForm.getByRole("radio", { name: "Option 1" }).isChecked();
     expect(radioStatus).toBeTruthy();
 
     // Locator assertion
-    await expect(
-      usingTheGridForm.getByRole("radio", { name: "Option 1" })
-    ).toBeChecked();
+    await expect(usingTheGridForm.getByRole("radio", { name: "Option 1" })).toBeChecked();
 
-    await usingTheGridForm
-      .getByRole("radio", { name: "Option 2" })
-      .check({ force: true });
+    await usingTheGridForm.getByRole("radio", { name: "Option 2" }).check({ force: true });
 
-    expect(
-      await usingTheGridForm
-        .getByRole("radio", { name: "Option 1" })
-        .isChecked()
-    ).toBeFalsy();
+    expect(await usingTheGridForm.getByRole("radio", { name: "Option 1" }).isChecked()).toBeFalsy();
 
     // This is a bit of a shortcut for the generic locators - you can pass the whole argument into the expect method rather than storing it elsewhere
-    expect(
-      await usingTheGridForm
-        .getByRole("radio", { name: "Option 2" })
-        .isChecked()
-    ).toBeTruthy();
+    expect(await usingTheGridForm.getByRole("radio", { name: "Option 2" }).isChecked()).toBeTruthy();
   });
 });
 
@@ -73,12 +55,8 @@ test("checkboxes", async ({ page }) => {
   //   force: true needs to be added due to the Visually hidden property on the element
   //   Using the check method rather than the click method ensures the desiered outcome is always chosen
   // If the box is already checked then .check wont change that
-  await page
-    .getByRole("checkbox", { name: "Hide on click" })
-    .uncheck({ force: true });
-  await page
-    .getByRole("checkbox", { name: "Prevent arising of duplicate toast" })
-    .check({ force: true });
+  await page.getByRole("checkbox", { name: "Hide on click" }).uncheck({ force: true });
+  await page.getByRole("checkbox", { name: "Prevent arising of duplicate toast" }).check({ force: true });
 
   const allBoxes = page.getByRole("checkbox");
   for (const box of await allBoxes.all()) {
@@ -150,16 +128,10 @@ test("dialog box", async ({ page }) => {
   });
 
   //   Grabbing the first row and hitting the delete button
-  await page
-    .getByRole("table")
-    .locator("tr", { hasText: "mdo@gmail.com" })
-    .locator(".nb-trash")
-    .click();
+  await page.getByRole("table").locator("tr", { hasText: "mdo@gmail.com" }).locator(".nb-trash").click();
 
   // Checking the first row has been deleted
-  await expect(page.locator("table tr").first()).not.toHaveText(
-    "mdo@gmail.com"
-  );
+  await expect(page.locator("table tr").first()).not.toHaveText("mdo@gmail.com");
 });
 
 test("web tables", async ({ page }) => {
@@ -176,20 +148,13 @@ test("web tables", async ({ page }) => {
 
   //2. get the row based on the value in the ID field
   await page.locator(".ng2-smart-pagination-nav").getByText("2").click();
-  const targetRowByID = page
-    .getByRole("row", { name: "11" })
-    .filter({ has: page.locator("td").nth(1).getByText("11") });
+  const targetRowByID = page.getByRole("row", { name: "11" }).filter({ has: page.locator("td").nth(1).getByText("11") });
   await targetRowByID.locator(".nb-edit").click();
   await page.locator("input-editor").getByPlaceholder("E-mail").clear();
-  await page
-    .locator("input-editor")
-    .getByPlaceholder("E-mail")
-    .fill("spencer@mail.com");
+  await page.locator("input-editor").getByPlaceholder("E-mail").fill("spencer@mail.com");
   await page.locator(".nb-checkmark").click();
 
-  await expect(targetRowByID.locator("td").nth(5)).toHaveText(
-    "spencer@mail.com"
-  );
+  await expect(targetRowByID.locator("td").nth(5)).toHaveText("spencer@mail.com");
 
   //3. Test filter of the table
   const ages = ["20", "30", "40", "200"];
@@ -202,9 +167,7 @@ test("web tables", async ({ page }) => {
     for (let row of await ageRows.all()) {
       const cellValue = await row.locator("td").last().textContent();
       if (age == "200") {
-        expect(await page.getByRole("table").textContent()).toContain(
-          "No data found"
-        );
+        expect(await page.getByRole("table").textContent()).toContain("No data found");
       } else {
         expect(cellValue).toEqual(age);
       }
@@ -228,24 +191,15 @@ test("datepicker", async ({ page }) => {
   const expectedYear = date.getFullYear();
   const dateToAssert = `${expectedMonthShort} ${expectedDate}, ${expectedYear}`;
 
-  let calendarMonthAndYear = await page
-    .locator("nb-calendar-view-mode")
-    .textContent();
+  let calendarMonthAndYear = await page.locator("nb-calendar-view-mode").textContent();
 
   const expectedMonthAndYear = ` ${expectedMonthLong} ${expectedYear}`;
   while (!calendarMonthAndYear.includes(expectedMonthAndYear)) {
-    await page
-      .locator("nb-calendar-pageable-navigation [data-name='chevron-right']")
-      .click();
-    calendarMonthAndYear = await page
-      .locator("nb-calendar-view-mode")
-      .textContent();
+    await page.locator("nb-calendar-pageable-navigation [data-name='chevron-right']").click();
+    calendarMonthAndYear = await page.locator("nb-calendar-view-mode").textContent();
   }
 
-  await page
-    .locator("[class='day-cell ng-star-inserted']")
-    .getByText(expectedDate, { exact: true })
-    .click();
+  await page.locator("[class='day-cell ng-star-inserted']").getByText(expectedDate, { exact: true }).click();
   await expect(calandarInputField).toHaveValue(dateToAssert);
 });
 
@@ -261,9 +215,7 @@ test("Sliders", async ({ page }) => {
   //   await tempGauge.click();
 
   //   Mouse movement
-  const tempBox = page.locator(
-    "[tabtitle='Temperature'] ngx-temperature-dragger"
-  );
+  const tempBox = page.locator("[tabtitle='Temperature'] ngx-temperature-dragger");
   await tempBox.scrollIntoViewIfNeeded();
 
   const box = await tempBox.boundingBox();

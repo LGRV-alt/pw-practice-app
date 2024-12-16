@@ -17,6 +17,12 @@ export class FormLayoutPage {
     await usingTheGridForm.getByRole("button").click();
   }
 
+  /**
+   * This method will fill out the inline form with user details
+   * @param name - should be first and last name
+   * @param email - valid email for the test user
+   * @param rememberMe - true of false if user session to be saved
+   */
   async SubmitInlineFormWithNameEmailAndCheckbox(name: string, email: string, rememberMe: boolean) {
     const usingTheInlinForm = this.page.locator("nb-card", {
       hasText: "inline form",
