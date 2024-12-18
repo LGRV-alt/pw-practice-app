@@ -1,8 +1,5 @@
 import { test, expect } from "@playwright/test";
 import { PageManager } from "../page-objects/pageManager";
-import { NavigationPage } from "../page-objects/navigationPage";
-import { FormLayoutPage } from "../page-objects/formLayoutsPage";
-import { DatePickerPage } from "../page-objects/datePickerPage";
 
 test.beforeEach(async ({ page }) => {
   await page.goto("http://localhost:4200/");
