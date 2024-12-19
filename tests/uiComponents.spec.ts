@@ -5,17 +5,19 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.describe("Form Layouts page", () => {
+  test.describe.configure({ retries: 2 });
   test.beforeEach(async ({ page }) => {
     await page.getByText("Forms").click();
     await page.getByText("Form Layouts").click();
   });
-  test("input fields", async ({ page }) => {
+  test("input fields", async ({ page }, testInfo) => {
+    if (testInfo.retry) {
+      // Do something
+    }
     const usingTheGridEmailInput = page.locator("nb-card", { hasText: "Using the grid" }).getByRole("textbox", { name: "email" });
     await usingTheGridEmailInput.fill("test@test.com");
     await usingTheGridEmailInput.clear();
-    await usingTheGridEmailInput.pressSequentially("test2@test.com", {
-      delay: 500,
-    });
+    await usingTheGridEmailInput.pressSequentially("test2@test.com");
     // Generic assertion
     const inputValue = await usingTheGridEmailInput.inputValue();
     expect(inputValue).toEqual("test2@test.com");

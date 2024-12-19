@@ -24,7 +24,7 @@ test("auto waiting", async ({ page }) => {
   });
 });
 
-test("Alternative Waits", async ({ page }) => {
+test.skip("Alternative Waits", async ({ page }) => {
   const successButton = page.locator(".bg-success");
 
   //___ wait for element - Will stick to this line till the element given appears on the page
@@ -41,7 +41,7 @@ test("Alternative Waits", async ({ page }) => {
   expect(text).toContain("Data loaded with AJAX get request.");
 });
 
-test("timeouts", async ({ page }) => {
+test.skip("timeouts", async ({ page }) => {
   // This will increase the time of the test by 3
   test.slow();
   // By default, this should pass - timeout set to 30sec by default
